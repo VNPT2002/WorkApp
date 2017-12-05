@@ -3,37 +3,41 @@ import {StackNavigator, TabNavigator, DrawerNavigator} from 'react-navigation';
 
 import Home from './src/screens/Home';
 import WorkIsLate from './src/screens/WorkIsLate';
+import WorkDetails from './src/screens/WorkDetails';
 
 const AppStackNavigator = StackNavigator({
   Home: {
     screen: Home
   },
-  WorkIsLate: {
+  Late: {
     screen: WorkIsLate
+  },
+  Details:{
+    screen: WorkDetails
   }
 });
 
-const AppTabNavigator = TabNavigator({
-  Home: {
-    screen: AppStackNavigator
-  },
-  WorkIsLate: {
-    screen: WorkIsLate
-  }
-}, 
-{
-  tabBarPosition: 'bottom',
-  animationEnabled: true,
-  tabBarOptions: {
-    activeTintColor: '#5C6BC0',
-  }
-});
+// const AppTabNavigator = TabNavigator({
+//   Home: {
+//     screen: AppStackNavigator
+//   },
+//   WorkIsLate: {
+//     screen: WorkIsLate
+//   }
+// }, 
+// {
+//   tabBarPosition: 'bottom',
+//   animationEnabled: true,
+//   tabBarOptions: {
+//     activeTintColor: '#5C6BC0',
+//   }
+// });
 
 const MyApp = DrawerNavigator({
   Home: {
-    screen: AppTabNavigator
+    screen: AppStackNavigator
   },
-  WorkIsLate:{
+  Late:{
     screen: WorkIsLate
   }
 },

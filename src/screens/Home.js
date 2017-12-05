@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {StyleSheet, Text, View, Button, Image, TouchableOpacity, FlatList} from 'react-native';
 
-
 const MenuButton = (props) =>(
     <TouchableOpacity onPress={()=>{props.navigation.navigate('DrawerOpen');}}>
         <Image source={require('../images/menu.png')} />
@@ -10,11 +9,9 @@ const MenuButton = (props) =>(
 
 export default class Home extends Component {
     static navigationOptions = ({ navigation }) => ({
-        title: `Home`,
-        headerBackTitle: null,
-        tabBarLabel: 'Home',
-        headerLeft: <MenuButton navigation={navigation} />        
-    });
+         title: `Home`,
+         headerLeft: <MenuButton navigation={navigation} />        
+    }); 
 
     constructor(props){
         super(props);
@@ -30,22 +27,20 @@ export default class Home extends Component {
     }
 
     componentDidMount() {
-        console.warn("run ...");
         this.makeRemoteRequest();
     }
 
     makeRemoteRequest = () => {
-        console.warn("makeRemoteRequest");
         const { page, seed } = this.state;
-        const url = `http://10.2.80.156:82/hcmtucv/work.nsf/DataRest.xsp/datadocument?loai=1&viewname=VwCongViecDangThucHien&idcat=vanthu1/CINOTEC/VN&_=1512355615704`;
+        //const url = `http://10.2.80.156:82/hcmtucv/work.nsf/DataRest.xsp/datadocument?loai=1&viewname=VwCongViecDangThucHien&idcat=vanthu1/CINOTEC/VN&_=1512355615704`;
+        const url = `http://java.cinotec.com.vn/HCMTUDEMO/work.nsf/DataRest.xsp/datadocument?loai=1&viewname=VwCongViecDangThucHien&idcat=vanthu1/CINOTEC/VN&_=1512355615704`;
         this.setState({ loading: true });
     
         fetch(url)
           .then(res => res.json())
           .then(res => {
-            console.warn(this.state.data);  
             this.setState({
-              data: page === 1 ? res.results : [...this.state.data, ...res.results],
+              data: page === 1 ? res.data: [...this.state.data, ...res.data],
               error: res.error || null,
               loading: false,
               refreshing: false
@@ -57,14 +52,23 @@ export default class Home extends Component {
     };
 
     render() {
+        const {navigate} = this.props.navigation;
         return (
+                //<List>
                      <FlatList
                         data={this.state.data}
                         renderItem={({ item }) => (
-                            <Text>item.NguoiXuLy</Text>
-                        )}         
+                            <TouchableOpacity onPress={()=>{navigate('Details', {id: '12313131'});}}>                           
+                            <View>
+                                <Text>{item.NoiDung}</Text>
+                                <Text>{item.NgayKetThuc} - {item.TrangThai}</Text>
+                            </View>           
+                            </TouchableOpacity>            
+                        )} 
+                        keyExtractor={item => item.FldSo} 
+                            
                     />    
-
+                //</List>
         );
     }
 }
