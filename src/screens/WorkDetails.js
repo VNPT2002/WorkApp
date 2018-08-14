@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Button,Image, TouchableOpacity} from 'react-native';
-
+import {StyleSheet, Text, View, Button,Image, TouchableOpacity, Platform} from 'react-native';
 
 const MenuButton = (props) =>(
   <TouchableOpacity onPress={()=>{props.navigation.navigate('DrawerOpen');}}>
@@ -8,21 +7,7 @@ const MenuButton = (props) =>(
   </TouchableOpacity>
 );
 
-handlePress=()=>{
-  //Android
-    OpenFile.openDoc([{
-     url:"http://java.cinotec.com.vn/HCMTUDEMO/work.nsf/99327CFEAFB6F91E472581EC002BB09F/$File/a.pdf", // Local "file://" + filepath
-     fileName:"a",
-     cache:false,
-     fileType:"pdf"
-   }], (error, url) => {
-      if (error) {
-        console.error(error);
-      } else {
-        console.log(url)
-      }
-   })
-};
+ 
 
 export default class WorkDetails extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -30,16 +15,39 @@ export default class WorkDetails extends Component {
     headerLeft: <MenuButton navigation={navigation} />        
   });
   
+  handlePress(id){
+    //Android
+    console.warn("scan file success" + id);
+  }
   
+  viewFileName(id, fileName){
+    const files = fileName.split('~');
+    return (
+      <View>
+           {
+             files.map((item, key)=> 
+               <TouchableOpacity key={key} onPress={()=>this.handlePress(id)}>
+                  <Text>{item}</Text>
+               </TouchableOpacity>
+              
+           )}
+      </View>     
+    )
+  }
+
+  
+
   render() {
     const {params} = this.props.navigation.state;
     return (
       <View style={styles.container}>
-        <Text>{params.id}</Text>
-        <TouchableOpacity onPress={handlePress.bind(this)}>
-          <Text>See a Document</Text>
-        </TouchableOpacity>
-        </View>
+        <Text>{params.item.FldSo}</Text>
+        <Text>{params.item.TrangThai}</Text>
+        <Text>{params.item.NoiDung}</Text>
+        <Text>{params.item.NgayBatDau}</Text>
+        <Text>{params.item.NgayKetThuc}</Text>
+        {this.viewFileName(params.item.ID, params.item.Taptin)}
+      </View>
     );
   }
 }
